@@ -115,7 +115,17 @@ WindowLayer {
                 entries: root.entries.length,
                 rows: root.rows.length,
                 bufferLength: root.buffer.length,
-                viewMode: root.viewMode
+                viewMode: root.viewMode,
+                window: root.windowMode,
+                sidebar: root.showSidebar,
+                sidebarTab: root.sidebarTab,
+                rightPanel: root.rightPanel,
+                toolbar: root.showToolbar,
+                tabs: root.tabState.tabs.length,
+                pins: root.pins.length,
+                captureBox: root.captureVisible,
+                renders: root.render.counts(),
+                panel: ui.status === Loader.Ready && ui.item ? Object.assign({ state: "ready" }, ui.item.layoutInfo()) : { state: ui.status === Loader.Error ? "error" : "off" }
             });
         }
     }

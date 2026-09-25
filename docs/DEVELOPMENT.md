@@ -23,6 +23,7 @@ or under `~/.nvm`), and optionally `typst` / `mmdr` (their tests are skipped whe
 | any other QML file (`qml/core`, `qml/ui/components`, `qml/ui/logic`, ...) or any `js/` file | `make restart` – these are cached by URL until the shell restarts |
 | `scripts/*.sh` | nothing, they run fresh each call |
 | `SuperNoteSettings.qml`, `plugin.json` | `make restart` |
+| before committing UI changes | `make restart && make test-ui` |
 
 If the panel does not appear after a change, QML failed to load it: the reason is in the journal
 (`journalctl --user -u dms --since -1min | grep -i supernote`); the entry file logs *"SuperNote: the panel failed to
@@ -36,7 +37,14 @@ load: ..."* with the component error. A second common cause is a stale cache: re
 - **Shell tests** (`tests/vault.test.sh`, `tests/render.test.sh`) run the scripts against a throw-away vault created under
   `$HOME` (`gio trash` refuses `/tmp`). `tests/run-all.sh` runs everything; `make test` calls it.
 - **Test-first for pure logic**: new behaviour in `js/` gets a failing test first. Bug fixes get a regression test.
-- **QML has no automated tests.** Verify UI changes on a running shell:
+- **UI smoke test** (`make test-ui`, `tests/ui/smoke.test.sh`): drives the *running* shell through its IPC in a
+  throw-away vault (open / close, dock / expand, view modes, left and right panel, tabs, palette commands, capture,
+  daily note, quick-capture box, search, math and Mermaid pictures) and asserts on the `status` JSON, which includes the
+  panel's real layout, on the files it produces and on the shell log (no QML errors). It takes under a minute, needs a
+  DMS session (it skips itself when none is running), restores your vault and settings afterwards, and is not part of
+  `make test`. `SN_UI_SKIP_RENDER=1` skips the math / Mermaid checks. To add a check, use `wait_for "<what>" '<jq
+  predicate on status>'` from `tests/ui/lib.sh`; expose new state through `status` in `SuperNote.qml` when needed.
+- **Everything else in QML** is checked by eye on a running shell:
   - `scripts/dev/snapshot.sh <dir>` drives the panel through its IPC in a throw-away vault (docked, sidebar, split /
     preview with math and Mermaid, window, search, capture box) and writes full-screen `grim` screenshots plus the
     `status` JSON of each state. Run it before and after a refactor and compare. Crop screenshots before sharing them:

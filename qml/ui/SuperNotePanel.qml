@@ -29,6 +29,21 @@ SyncLayer {
     readonly property var keys: keysScope
     readonly property var panelBg: panelBackground
 
+    // Sizes of the main areas, for the IPC status and the UI smoke tests (tests/ui).
+    function layoutInfo() {
+        return {
+            mode: core.windowMode,
+            visible: overlay.visible || floatWin.visible,
+            width: Math.round(keysScope.width),
+            height: Math.round(keysScope.height),
+            sidebarWidth: Math.round(sidebar.width),
+            editorWidth: Math.round(editorArea.width),
+            rightPanelWidth: Math.round(rightPanelItem.width),
+            editorVisible: editor.visible,
+            previewVisible: previewFlick.visible
+        };
+    }
+
     // "Expand": the same panel content (keysScope) is re-parented into a real, compositor-managed window.
     DankFloatingWindow {
         id: floatWin

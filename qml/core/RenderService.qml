@@ -112,6 +112,14 @@ QtObject {
         });
     }
 
+    // How many pictures are ready / rendering / failed (for the IPC status).
+    function counts() {
+        const c = { ok: 0, pending: 0, error: 0 };
+        for (const key in cache)
+            c[cache[key].state]++;
+        return c;
+    }
+
     // Forget failed renders so the next preview pass tries them again (after installing typst / mmdr, or coming online).
     function retryFailed() {
         for (const key in cache)

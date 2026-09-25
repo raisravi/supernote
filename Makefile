@@ -3,10 +3,11 @@ PLUGIN_ID := supernote
 QMLLINT   ?= $(firstword $(wildcard /usr/lib/qt6/bin/qmllint) qmllint)
 DMS_PLUGINS ?= $(HOME)/.config/DankMaterialShell/plugins
 
-.PHONY: test lint reload restart link mdit help
+.PHONY: test test-ui lint reload restart link mdit help
 
 help:
 	@echo "make test      run all unit + shell tests"
+	@echo "make test-ui   UI smoke test against the RUNNING shell (about a minute; drives the panel, restores your state)"
 	@echo "make lint      qmllint every QML file"
 	@echo "make reload    reload only the entry file (dms ipc call plugins reload)"
 	@echo "make restart   restart DMS (needed after editing any other QML/JS file: they are cached)"
@@ -15,6 +16,9 @@ help:
 
 test:
 	@tests/run-all.sh
+
+test-ui:
+	@bash tests/ui/smoke.test.sh
 
 lint:
 	@$(QMLLINT) $$(git ls-files '*.qml') 2>&1 | grep -E '^Error' && exit 1 || echo "qmllint: no errors"

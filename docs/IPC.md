@@ -39,8 +39,16 @@ to call right after start-up. The panel opens on the focused screen.
 ```json
 {"visible": true, "vault": "/home/ravi/Documents/notes", "vaults": ["/home/ravi/Documents/notes"],
  "note": "Daily/2026-09-25.md", "dirty": false, "conflict": false,
- "entries": 42, "rows": 9, "bufferLength": 1830, "viewMode": "edit"}
+ "entries": 42, "rows": 9, "bufferLength": 1830, "viewMode": "edit",
+ "window": "dock", "sidebar": false, "sidebarTab": "files", "rightPanel": false, "toolbar": true,
+ "tabs": 1, "pins": 0, "captureBox": false,
+ "renders": {"ok": 3, "pending": 0, "error": 0},
+ "panel": {"state": "ready", "mode": "dock", "visible": true, "width": 500, "height": 1016, "sidebarWidth": 0,
+           "editorWidth": 500, "rightPanelWidth": 0, "editorVisible": true, "previewVisible": false}}
 ```
+
+`panel.state` is `ready` once the panel QML has loaded, `error` when it failed to load and `off` before the first open.
+The `panel` sizes are the real layout (in pixels), which is what the UI smoke tests assert on.
 
 ## Examples
 
