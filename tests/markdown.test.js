@@ -199,4 +199,21 @@ test("headingOffset: finds a heading case-insensitively, ignores fences", () => 
   test("removeProperty: removing the last key removes the block", () => assert.strictEqual(M.removeProperty("---\nz: 1\n---\nbody", "z"), "body"));
   test("removeProperty: missing key / no frontmatter is a no-op", () => { assert.strictEqual(M.removeProperty("x", "a"), "x"); assert.strictEqual(M.removeProperty("---\na: 1\n---\n", "b"), "---\na: 1\n---\n"); });
 }
+// ---- linkAt: the wikilink under a text offset ----
+{
+  const at = (marked) => { const o = marked.indexOf("|"); return M.linkAt(marked.replace("|", ""), o); };
+  test("linkAt: inside a link", () => assert.deepStrictEqual(at("see [[No|te]] now"), { name: "Note", heading: "", alias: "", embed: false }));
+  test("linkAt: on the brackets counts", () => { assert.strictEqual(at("|[[Note]]").name, "Note"); assert.strictEqual(at("[[Note]]|").name, "Note"); });
+  test("linkAt: heading and alias", () => assert.deepStrictEqual(M.linkAt("[[Note#Sec|al]]", 3), { name: "Note", heading: "Sec", alias: "al", embed: false }));
+  test("linkAt: embeds are reported as such", () => assert.strictEqual(at("![[Note|]]").embed, true));
+  test("linkAt: outside any link", () => { assert.strictEqual(at("a| [[Note]]"), null); assert.strictEqual(at("[[Note]] b|c"), null); });
+  test("linkAt: second link on a line", () => assert.strictEqual(M.linkAt("[[A]] and [[B|b]]", 13).name, "B"));
+  test("linkAt: code spans and fences do not count", () => {
+    assert.strictEqual(at("`[[No|te]]`"), null);
+    assert.strictEqual(M.linkAt("```\n[[Note]]\n```", 6), null);
+  });
+  test("linkAt: link on a later line", () => assert.strictEqual(M.linkAt("first\nsee [[Note]]", 12).name, "Note"));
+  test("linkAt: empty target is not a link", () => assert.strictEqual(at("[[|]]"), null));
+}
+
 console.log("markdown.js (editing/extraction/find): " + passed + " passed" + (process.exitCode ? " (with failures)" : ""));

@@ -99,6 +99,15 @@ PanelBase {
         });
     }
 
+    // Ctrl+Enter / Ctrl+click: follow the wikilink under the caret (or at a text offset). true when there was one.
+    function followLinkAt(offset) {
+        const link = Md.linkAt(editor.text, offset);
+        if (!link)
+            return false;
+        core.openLink(link.name, link.heading);
+        return true;
+    }
+
     function editorKey(event) {
         if (acOpen) {
             if (event.key === Qt.Key_Down || event.key === Qt.Key_Up) {
@@ -120,6 +129,10 @@ PanelBase {
         const ctrl = (event.modifiers & Qt.ControlModifier) !== 0;
         const shift = (event.modifiers & Qt.ShiftModifier) !== 0;
         const alt = (event.modifiers & Qt.AltModifier) !== 0;
+        if (ctrl && !alt && !shift && (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) && followLinkAt(editor.cursorPosition)) {
+            event.accepted = true;
+            return;
+        }
         if (ctrl && !alt && !shift && event.key === Qt.Key_V) {
             pasteFromClipboard();
             event.accepted = true;

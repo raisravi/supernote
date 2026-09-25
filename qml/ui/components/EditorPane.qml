@@ -54,6 +54,12 @@ Flickable {
         topPadding: 10
         bottomPadding: 40
         background: null
+        // Ctrl+click follows a [[wikilink]] (a plain click still just places the caret)
+        TapHandler {
+            acceptedModifiers: Qt.ControlModifier
+            gesturePolicy: TapHandler.ReleaseWithinBounds
+            onTapped: eventPoint => ui.followLinkAt(editor.positionAt(eventPoint.position.x, eventPoint.position.y))
+        }
         placeholderText: "Start writing…"
         placeholderTextColor: Theme.surfaceVariantText
         cursorDelegate: Rectangle {

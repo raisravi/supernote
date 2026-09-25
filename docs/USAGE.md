@@ -61,8 +61,9 @@ instead of overwriting either side.
 - `Enter` continues bullets, numbers, tasks and quotes (an empty item ends the list). `(`, `[`, `{` and `` ` `` auto-pair
   (`[[` gives `[[]]`); typing the closer skips over it.
 - **Wikilinks**: `[[` opens note suggestions (`Up`/`Down`, `Enter`/`Tab` insert, `Esc` dismiss); notes whose names clash
-  insert as `folder/Name`. `[[Note#Heading]]` and `[[Note|alias]]` work; clicking a link in the Preview opens the
-  note (or creates it in the vault root when it does not exist).
+  insert as `folder/Name`. `[[Note#Heading]]` and `[[Note|alias]]` work. Follow a link with `Ctrl+click` or
+  `Ctrl+Enter` (caret on the link) in the editor, or a plain click in the Preview; a link to a note that does not
+  exist creates it in the vault root.
 - **Slash menu**: `/` at the start of a line lists headings, bullet / numbered list, task, quote, code block, table,
   callout, divider, link, today's date, current time and *Insert template...*.
 - **Find** `Ctrl+F`, **replace** `Ctrl+H` (case and regex toggles, `Enter` = next).

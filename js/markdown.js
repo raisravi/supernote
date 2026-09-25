@@ -758,6 +758,52 @@ function extractLinks(text) {
     return out;
 }
 
+// The wikilink covering `offset` (brackets included): {name, heading, alias, embed} or null.
+// Links inside code spans and code fences do not count.
+function linkAt(text, offset) {
+    var lines = text.split("\n");
+    var pos = 0;
+    var target = -1;
+    for (var i = 0; i < lines.length; i++) {
+        if (offset <= pos + lines[i].length) {
+            target = i;
+            break;
+        }
+        pos += lines[i].length + 1;
+    }
+    if (target < 0)
+        return null;
+    var inFence = false;
+    var fence = null;
+    var fm = parseFrontmatter(text);
+    for (var k = fm.bodyLine; k <= target; k++) {
+        var f = /^\s*(```+|~~~+)/.exec(lines[k] || "");
+        if (f) {
+            if (!fence)
+                fence = f[1].charAt(0);
+            else if (f[1].charAt(0) === fence)
+                fence = null;
+            if (k === target)
+                return null;
+        }
+    }
+    if (fence !== null)
+        return null;
+    var col = offset - pos;
+    var clean = lines[target].replace(/`[^`\n]*`/g, function (m) { return new Array(m.length + 1).join(" "); });
+    var re = /(!?)\[\[([^\]|#\n]*)(?:#([^\]|\n]*))?(?:\|([^\]\n]*))?\]\]/g;
+    var m;
+    while ((m = re.exec(clean)) !== null) {
+        if (col >= m.index && col <= m.index + m[0].length) {
+            var name = m[2].trim();
+            if (!name)
+                return null;
+            return { name: name, heading: (m[3] || "").trim(), alias: (m[4] || "").trim(), embed: m[1] === "!" };
+        }
+    }
+    return null;
+}
+
 // Caret inside an unfinished [[ ... ? -> {start, query}; the alias/heading parts are not completed.
 function linkContext(text, cursor) {
     var ls = lineStart(text, cursor);

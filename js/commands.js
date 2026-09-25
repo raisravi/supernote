@@ -52,6 +52,7 @@ var EDITING = [
     { title: "Paste image from clipboard", keys: "Ctrl+V" },
     { title: "Slash menu (blocks, date, template)", keys: "/ at line start" },
     { title: "Link to a note", keys: "[[" },
+    { title: "Follow the link under the caret", keys: "Ctrl+Enter / Ctrl+click" },
     { title: "Save now", keys: "Ctrl+S" },
     { title: "Command palette", keys: "Ctrl+P" },
     { title: "Next / previous tab", keys: "Ctrl+Tab / Ctrl+Shift+Tab" }
