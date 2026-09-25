@@ -60,11 +60,13 @@ case $cmd in
     [[ -f $src && -n $out ]] || die "usage: math <srcfile> <out.png> <fg> <display>"
     valid_color "$fg"; need typst; need magick; check_src "$src"
     if [[ -s $out ]]; then finish "$out"; exit 0; fi
-    if [[ $display == 1 ]]; then body='#mitex(sys.inputs.src)'; else body='$#mimath(sys.inputs.src)$'; fi
+    # top/bottom edge "bounds": stacked fractions and limits are not cropped to the font's cap height / baseline
+    # sizes are a little above the preview's 16 px body text: Typst's math font looks smaller than the sans body font
+    if [[ $display == 1 ]]; then body='#mitex(sys.inputs.src)'; size=15pt; else body='$#mimath(sys.inputs.src)$'; size=13.5pt; fi
     tmp=$(mktemp "$CACHE/tmp-XXXXXX.png")
     trap 'rm -f "$tmp" "$tmp.err"' EXIT
     # stdin -> stdout: the snap-packaged typst cannot read or write hidden folders like ~/.cache
-    if ! printf '#import "@preview/mitex:0.2.7": *\n#set page(width: auto, height: auto, margin: 3pt, fill: none)\n#set text(size: 11.25pt, fill: rgb("%s"))\n%s\n' "$fg" "$body" \
+    if ! printf '#import "@preview/mitex:0.2.7": *\n#set page(width: auto, height: auto, margin: 3pt, fill: none)\n#set text(size: %s, fill: rgb("%s"), top-edge: "bounds", bottom-edge: "bounds")\n%s\n' "$size" "$fg" "$body" \
         | timeout -k 2 25 typst compile --format png --ppi 192 --input "src=$(cat "$src")" - - > "$tmp" 2> "$tmp.err"; then
       msg=$(grep -m1 '^error' "$tmp.err" || true); rm -f "$tmp.err"; die "${msg:-typst failed}"
     fi

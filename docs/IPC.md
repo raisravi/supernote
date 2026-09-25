@@ -31,7 +31,7 @@ to call right after start-up. The panel opens on the focused screen.
 
 `command` ids (see `js/commands.js`): `new-note`, `new-from-template`, `insert-template`, `daily`, `capture`,
 `switcher`, `rename`, `pin`, `delete`, `toggle-view`, `right-panel`, `toggle-sidebar`, `expand-window`, `toolbar`,
-`properties`, `search`, `tags`, `files`, `back`, `forward`, `new-tab`, `close-tab`, `find`, `replace`, `undo-rename`,
+`properties`, `retry-renders`, `search`, `tags`, `files`, `back`, `forward`, `new-tab`, `close-tab`, `find`, `replace`, `undo-rename`,
 `add-vault`, `palette`, `cheatsheet`. Commands that need an open note do nothing without one.
 
 ## `status`

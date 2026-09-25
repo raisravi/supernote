@@ -40,12 +40,18 @@ flowchart LR
   first measured (`mmdr --size`, which also rejects invalid syntax), then rendered at twice that size with the built-in
   `dark` or `default` theme and a transparent background. `mmdr` supports 23 diagram types; it is young, so styling
   can differ from mermaid.js and some diagrams may fail. Those stay code blocks and produce one toast per session.
+- **Sizes**: math is set slightly larger than the 16 px preview text (Typst's math font looks smaller) and uses the actual
+  bounds of the formula, so stacked fractions and limits are not cropped. Bump `VERSION` in `js/render.js` when the look
+  changes, so cached pictures are regenerated.
 - **Scale**: pictures are 2x; the preview shows them at half their pixel width (capped to the pane width).
 - **Limits**: sources over 20 kB are not rendered; pictures wider than 6000 px or taller than 5000 px are refused;
   a pass over a note requests at most 40 new pictures (the rest follows on the next pass); jobs from a previous pass
   that are no longer on screen are dropped; two math jobs and one Mermaid job run at a time; each job has a timeout.
 - **Retries**: a failed picture is retried after 60 seconds (so installing a tool or coming back online fixes it
-  without a restart).
+  without a restart); the palette entry *Retry failed math / diagram renders* (`retry-renders`) retries at once.
+- **While rendering (and when it failed)** inline math shows its source as a code chip and `$$` blocks as a code
+  block, so nothing is hidden; the picture replaces it when ready.
+- **Quotes and callouts**: a `mermaid` fence inside a `>` blockquote or callout is rendered too.
 - **Cache**: keyed by content and theme, so a theme change re-renders. Files older than 45 days are pruned at start-up
   and at most 800 are kept.
 

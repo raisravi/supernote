@@ -14,10 +14,13 @@ function hash(str) {
 }
 
 // style: {display, fg: "#rrggbb", dark}. Includes everything that changes the picture.
+// Bump when the look of the pictures changes (sizes, themes): old cached files then stop matching.
+var VERSION = 4;
+
 function key(kind, src, style) {
     // Mermaid pictures use the built-in dark / default theme: text color and `display` do not change them.
     var mermaid = kind === "mermaid";
-    var s = [kind, mermaid || !style.display ? "0" : "1", mermaid ? "" : style.fg, style.dark ? "d" : "l", src.length, src].join("\u0001");
+    var s = [VERSION, kind, mermaid || !style.display ? "0" : "1", mermaid ? "" : style.fg, style.dark ? "d" : "l", src.length, src].join("\u0001");
     return kind + "-" + hash(s);
 }
 

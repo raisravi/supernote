@@ -17,6 +17,7 @@ var COMMANDS = [
     { id: "right-panel", group: "View", title: "Toggle right panel", keys: "Ctrl+Shift+B" },
     { id: "toggle-sidebar", group: "View", title: "Toggle left panel (files / search / tags)", keys: "Ctrl+\\" },
     { id: "expand-window", group: "View", title: "Expand to window / dock to the right", keys: "" },
+    { id: "retry-renders", group: "View", title: "Retry failed math / diagram renders", keys: "" },
     { id: "toolbar", group: "View", title: "Toggle formatting toolbar", keys: "" },
     { id: "properties", group: "View", title: "Toggle properties", keys: "", needsNote: true },
     { id: "search", group: "Navigate", title: "Search all notes", keys: "Ctrl+Shift+F" },

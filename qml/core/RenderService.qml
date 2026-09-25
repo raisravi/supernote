@@ -112,6 +112,15 @@ QtObject {
         });
     }
 
+    // Forget failed renders so the next preview pass tries them again (after installing typst / mmdr, or coming online).
+    function retryFailed() {
+        for (const key in cache)
+            if (cache[key].state === "error")
+                delete cache[key];
+        warned = ({});
+        serial++;
+    }
+
     // Old pictures are pruned once per start.
     function prune() {
         core.run([script, "prune"], () => {});

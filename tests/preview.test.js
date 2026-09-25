@@ -146,7 +146,18 @@ test("highlight: fuzz - visible text always equals input (3000 random markdown-i
     assert.strictEqual(md("a $x^2$ b"), "a ![math|80](file:///c/math1.png) b");
     assert.deepStrictEqual(j(calls), [["math", "x^2", false]]);
   });
-  test("inline math not ready yet stays as text", () => assert.strictEqual(md("a $x^2$ b", "pending"), "a $x^2$ b"));
+  test("inline math not ready yet is shown as a code chip (styled source)", () => assert.strictEqual(md("a $x^2$ b", "pending"), "a `$x^2$` b"));
+  test("a $$ block not ready yet is shown as a code block", () => {
+    assert.strictEqual(md("$$\na = b\nc = d\n$$", "pending"), "```tex\n$$\na = b\nc = d\n$$\n```");
+    assert.strictEqual(md("$$a$$", "pending"), "```tex\n$$\na\n$$\n```");
+  });
+  test("pending math is only restyled when a renderer exists", () => assert.strictEqual(raw.renderPreview("a $x$ b\n\n$$y$$", ctx).markdown, "a $x$ b\n\n$$y$$"));
+  test("mermaid inside a blockquote / callout becomes an image", () => {
+    calls.length = 0;
+    assert.strictEqual(md("> [!note] Flow\n> ```mermaid\n> graph TD\n>  A-->B\n> ```\n> after"), "> **ⓘ Flow**  \n> ![mermaid|80](file:///c/mermaid1.png)  \n> after");
+    assert.deepStrictEqual(j(calls), [["mermaid", "graph TD\n A-->B", true]]);
+  });
+  test("mermaid in a blockquote not ready stays as it is", () => assert.strictEqual(md("> ```mermaid\n> graph TD\n> ```", "pending"), "> ```mermaid  \n> graph TD  \n> ```"));
   test("prices and lone dollars are not math", () => {
     calls.length = 0;
     assert.strictEqual(md("costs $5 and $6 today"), "costs $5 and $6 today");

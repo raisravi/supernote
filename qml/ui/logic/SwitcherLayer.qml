@@ -90,6 +90,7 @@ SidebarLayer {
         case "toggle-view": core.cycleViewMode(); break;
         case "right-panel": core.setRightPanel(!core.rightPanel); break;
         case "toolbar": core.toggleToolbar(); break;
+        case "retry-renders": core.render.retryFailed(); break;
         case "toggle-sidebar": core.toggleSidebar(); break;
         case "expand-window": if (core.windowMode === "window") core.dockAgain(); else core.expandToWindow(); break;
         case "properties": core.toggleProps(); break;

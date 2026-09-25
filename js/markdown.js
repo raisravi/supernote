@@ -478,14 +478,16 @@ function renderPreview(text, ctx) {
         if (!ctx.diagram || seg.indexOf("$") < 0)
             return seg;
         seg = seg.replace(/(^|[^\\$])\$\$([^$\n]+?)\$\$/g, function (all, lead, src) {
-            var img = src.trim() !== "" ? picture("math", src.trim(), true) : null;
-            return img ? lead + img : all;
+            if (src.trim() === "")
+                return all;
+            var img = picture("math", src.trim(), true);
+            return lead + (img || "`$$" + src.trim() + "$$`");
         });
         return seg.replace(/(^|[^\\$])\$([^\s$][^$\n]*?[^\s$\\]|[^\s$\\])\$(?!\d)/g, function (all, lead, src) {
             if (/^\d[\d.,]*\s+[A-Za-z]{2,}\b/.test(src))
                 return all;   // "$5 and 5$": prices, not a formula
             var img = picture("math", src, false);
-            return img ? lead + img : all;
+            return lead + (img || "`$" + src + "$`");   // not rendered yet (or failed): show the source as a code chip
         });
     }
 
@@ -496,12 +498,40 @@ function renderPreview(text, ctx) {
         return parts.join("");
     }
 
-    // ```mermaid fences and $$ blocks that already have a picture become one image line
+    // ```mermaid fences and $$ blocks that already have a picture become one image line; math that has none yet
+    // (rendering, or failed) is shown as a code block so its source stays readable.
     function diagramBlocks(items) {
         var res = [];
         var inFence = false;
+        var QUOTE = /^(\s*(?:>\s?)+)/;
         for (var a = 0; a < items.length; a++) {
             var it = items[a];
+            // a mermaid fence inside a blockquote / callout: "> ```mermaid" ... "> ```"
+            var qm = !it.fence && !inFence ? /^(\s*(?:>\s?)+)\s*(```+|~~~+)\s*mermaid\s*$/i.exec(it.line) : null;
+            if (qm) {
+                var qmarker = qm[2].charAt(0);
+                var qz = -1;
+                for (var qb = a + 1; qb < items.length && !items[qb].fence; qb++) {
+                    var qc = QUOTE.exec(items[qb].line);
+                    var qrest = qc ? items[qb].line.slice(qc[1].length) : null;
+                    var qcl = qrest === null ? null : /^\s*(```+|~~~+)\s*$/.exec(qrest);
+                    if (qc && qcl && qcl[1].charAt(0) === qmarker) {
+                        qz = qb;
+                        break;
+                    }
+                    if (!qc)
+                        break;
+                }
+                if (qz > 0) {
+                    var qsrc = items.slice(a + 1, qz).map(function (x) { return x.line.slice(QUOTE.exec(x.line)[1].length); }).join("\n");
+                    var qimg = picture("mermaid", qsrc, true);
+                    if (qimg) {
+                        res.push({ line: qm[1] + qimg, idx: it.idx, fence: false, raw: true });
+                        a = qz;
+                        continue;
+                    }
+                }
+            }
             if (it.fence) {
                 var open = !inFence && /^\s*(```+|~~~+)\s*mermaid\s*$/i.test(it.line);
                 var fm = /^\s*(```+|~~~+)/.exec(it.line);
@@ -550,9 +580,15 @@ function renderPreview(text, ctx) {
                         body.push(items[c].line);
                     }
                 }
-                var dimg = src !== null && src.trim() !== "" ? picture("math", src.trim(), true) : null;
-                if (dimg) {
-                    res.push({ line: dimg, idx: it.idx, fence: false, raw: true });
+                if (src !== null && src.trim() !== "") {
+                    var dimg = picture("math", src.trim(), true);
+                    if (dimg) {
+                        res.push({ line: dimg, idx: it.idx, fence: false, raw: true });
+                    } else {
+                        ["```tex", "$$"].concat(src.trim().split("\n"), ["$$", "```"]).forEach(function (l) {
+                            res.push({ line: l, idx: it.idx, fence: true, raw: true });
+                        });
+                    }
                     a = last;
                     continue;
                 }
