@@ -1,7 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
-import "../../js/search.js" as Search
+import "../../../js/search.js" as Search
 
 // Sidebar search pane: query field, results grouped by note (ui.searchRows). Inputs: ui. Exposes the query field (`field`).
 FocusScope {

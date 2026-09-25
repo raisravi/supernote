@@ -1,7 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
-import "widgets"
+import "../widgets"
 
 // Find / replace bar (Ctrl+F / Ctrl+H). Inputs: ui (find* state). Exposes the two text fields. The host anchors it.
 Rectangle {

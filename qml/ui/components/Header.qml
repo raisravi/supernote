@@ -1,7 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
-import "widgets"
+import "../widgets"
 
 // Panel header: vault menu button, new note / daily / folder / sort / refresh / pin / right panel / sidebar /
 // expand-to-window / close buttons.

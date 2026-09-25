@@ -1,5 +1,5 @@
 import QtQuick
-import "../../js/markdown.js" as Md
+import "../../../js/markdown.js" as Md
 
 // Panel logic, part 3: find / replace in the open note.
 EditingLayer {

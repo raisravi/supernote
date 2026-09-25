@@ -1,8 +1,8 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
-import "../../js/markdown.js" as Md
-import "widgets"
+import "../../../js/markdown.js" as Md
+import "../widgets"
 
 // Collapsible frontmatter properties editor under the title (edit / remove / add keys). Inputs: ui. The host anchors it.
 Item {

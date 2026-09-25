@@ -1,5 +1,5 @@
 import QtQuick
-import "../../js/markdown.js" as Md
+import "../../../js/markdown.js" as Md
 
 // Panel logic, part 7: keeps the editor in step with the core (note loaded, buffer changed, jumps, prompts).
 PreviewLayer {

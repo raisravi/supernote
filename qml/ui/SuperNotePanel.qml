@@ -4,6 +4,8 @@ import Quickshell.Wayland
 import qs.Common
 import qs.Services
 import qs.Widgets
+import "logic"
+import "components"
 
 // SuperNote panel: the window host and the layout of the panel components. It is docked on the right side of the screen
 // (a layer-shell overlay) or, after "expand", a real floating window; the same `keys` item is re-parented between the two.

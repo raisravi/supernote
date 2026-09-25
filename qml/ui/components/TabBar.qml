@@ -1,8 +1,8 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
-import "../../js/tabs.js" as Tabs
-import "widgets"
+import "../../../js/tabs.js" as Tabs
+import "../widgets"
 
 // Tab strip with back / forward and the new-tab button. Inputs: ui (ui.core.tabState).
 Rectangle {

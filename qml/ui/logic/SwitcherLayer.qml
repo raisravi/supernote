@@ -1,8 +1,8 @@
 import QtQuick
-import "../../js/markdown.js" as Md
-import "../../js/fuzzy.js" as Fuzzy
-import "../../js/commands.js" as Commands
-import "../../js/slash.js" as Slash
+import "../../../js/markdown.js" as Md
+import "../../../js/fuzzy.js" as Fuzzy
+import "../../../js/commands.js" as Commands
+import "../../../js/slash.js" as Slash
 
 // Panel logic, part 5: quick switcher / command palette / template + folder pickers, `[[` and `/` autocomplete,
 // outline / links / backlinks data for the right panel, cheat sheet rows.

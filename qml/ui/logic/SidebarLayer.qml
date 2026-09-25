@@ -1,7 +1,7 @@
 import QtQuick
-import "../../js/search.js" as Search
-import "../../js/tags.js" as Tags
-import "../../js/fuzzy.js" as Fuzzy
+import "../../../js/search.js" as Search
+import "../../../js/tags.js" as Tags
+import "../../../js/fuzzy.js" as Fuzzy
 
 // Panel logic, part 4: sidebar search results and tag rows.
 FindLayer {

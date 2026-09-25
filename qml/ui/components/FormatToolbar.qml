@@ -1,7 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
-import "widgets"
+import "../widgets"
 
 // Formatting toolbar (headings, bold, italic, lists, ...) and the find button. Inputs: ui. The host anchors it.
 Rectangle {

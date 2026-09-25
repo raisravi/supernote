@@ -1,7 +1,7 @@
 import QtQuick
 import qs.Common
-import "../../js/markdown.js" as Md
-import "../../js/previewhtml.js" as Html
+import "../../../js/markdown.js" as Md
+import "../../../js/previewhtml.js" as Html
 
 // Panel logic, part 6: markdown preview (HTML, colors, links, math/Mermaid pictures).
 SwitcherLayer {

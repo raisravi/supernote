@@ -1,7 +1,7 @@
 import QtQuick
 import qs.Common
-import "../../js/markdown.js" as Md
-import "../../js/mdkeys.js" as MdKeys
+import "../../../js/markdown.js" as Md
+import "../../../js/mdkeys.js" as MdKeys
 
 // Panel logic, part 2: editing helpers (formatting, edits, paste, editor keys), syntax-highlight state, cursor info.
 PanelBase {

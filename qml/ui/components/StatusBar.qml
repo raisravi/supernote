@@ -1,7 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
-import "widgets"
+import "../widgets"
 
 // Status bar: note path, cursor position, word count, save state, view mode / toolbar buttons. Inputs: ui.
 Rectangle {
