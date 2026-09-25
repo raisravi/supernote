@@ -9,6 +9,15 @@ Item {
     id: propsBlock
     required property var ui
 
+    // Values from the model arrive as list-like objects, for which Array.isArray() is false.
+    function isList(v) {
+        return v !== null && typeof v === "object" && v.length !== undefined;
+    }
+
+    function display(v) {
+        return isList(v) ? Array.prototype.join.call(v, ", ") : String(v);
+    }
+
     visible: ui.core.noteRel !== "" && ui.core.viewMode !== "preview"
     anchors.topMargin: 4
     height: visible ? propsHead.height + (ui.core.propsOpen ? propsList.implicitHeight + 6 : 0) : 0
@@ -78,18 +87,18 @@ Item {
                     selectionColor: Theme.primary
                     selectedTextColor: Theme.primaryText
                     font.pixelSize: Theme.fontSizeMedium
-                    text: Array.isArray(modelData.value) ? modelData.value.join(", ") : modelData.value
+                    text: propsBlock.display(modelData.value)
                     selectByMouse: true
                     onEditingFinished: {
                         if (prow.forNote !== ui.core.noteRel)
                             return;
-                        const cur = Array.isArray(prow.modelData.value) ? prow.modelData.value.join(", ") : prow.modelData.value;
+                        const cur = propsBlock.display(prow.modelData.value);
                         if (text !== cur)
-                            ui.commitProp(prow.modelData.key, text, Array.isArray(prow.modelData.value));
+                            ui.commitProp(prow.modelData.key, text, propsBlock.isList(prow.modelData.value));
                     }
                     Keys.onPressed: event => {
                         if (event.key === Qt.Key_Escape) {
-                            text = Array.isArray(prow.modelData.value) ? prow.modelData.value.join(", ") : prow.modelData.value;
+                            text = propsBlock.display(prow.modelData.value);
                             ui.focusEditor();
                             event.accepted = true;
                         }
