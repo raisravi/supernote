@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import qs.Common
-import qs.Widgets
 
 // The editor: a scrolling monospace TextArea with a colored RichText underlay for syntax highlighting.
 // Inputs: ui. Exposes the text area, its flickable and the underlay.
@@ -67,7 +66,7 @@ Flickable {
             if (!ui.syncing) {
                 ui.core.onEdited(text);
                 if (ui.findOpen)
-                    findTimer.restart();
+                    ui.findTimer.restart();
             }
             ui.refreshHighlight();
             ui.updateAutocomplete();

@@ -98,7 +98,10 @@ WindowLayer {
             return "vault: " + root.expandPath(path);
         }
         function viewMode(mode: string): string {
-            root.setViewMode(mode);
+            root.afterState(() => {
+                root.ensureState();
+                root.setViewMode(mode);
+            });
             return "viewMode: " + root.viewMode;
         }
         function status(): string {

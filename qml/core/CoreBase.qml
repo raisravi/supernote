@@ -2,7 +2,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import "../../js/tree.js" as Tree
-import qs.Common
 import qs.Services
 import qs.Modules.Plugins
 

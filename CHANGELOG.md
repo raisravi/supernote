@@ -6,7 +6,7 @@
 - **Own repository and code organization.** The plugin moved to its own git repository with a `js/`, `scripts/`, `qml/`,
   `tests/`, `docs/` layout. `SuperNote.qml` (about 2000 lines) is now a chain of focused layers in `qml/core` plus
   `StateStore` and `RenderService`; `SuperNotePanel.qml` (about 3300 lines) is a window host with 22 components in
-  `qml/ui/components`, a logic chain in `qml/ui/logic` and two widgets. Behavior is unchanged.
+  `qml/ui/components`, a logic chain in `qml/ui/logic` and two widgets. Behavior is unchanged apart from the fixes below.
 - **Mermaid renders with `mmdr`** (pure Rust) instead of headless Chrome: from `PATH`, or a pinned SHA-256-verified
   download. Chrome and mermaid.js are no longer used.
 - Documentation: README plus `docs/` (usage, IPC, configuration, architecture, development, rendering, design).

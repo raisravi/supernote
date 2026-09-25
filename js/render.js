@@ -15,7 +15,9 @@ function hash(str) {
 
 // style: {display, fg: "#rrggbb", dark}. Includes everything that changes the picture.
 function key(kind, src, style) {
-    var s = [kind, style.display ? "1" : "0", style.fg, style.dark ? "d" : "l", src.length, src].join("\u0001");
+    // Mermaid pictures use the built-in dark / default theme: text color and `display` do not change them.
+    var mermaid = kind === "mermaid";
+    var s = [kind, mermaid || !style.display ? "0" : "1", mermaid ? "" : style.fg, style.dark ? "d" : "l", src.length, src].join("\u0001");
     return kind + "-" + hash(s);
 }
 

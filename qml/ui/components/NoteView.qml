@@ -1,6 +1,5 @@
 import QtQuick
 import qs.Common
-import qs.Widgets
 
 // The open note: conflict banner, inline title, properties, formatting toolbar, find bar, editor / preview panes and status bar.
 // Inputs: ui. Exposes the items the panel logic needs (editor, title field, flickables, find fields).

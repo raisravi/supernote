@@ -1,6 +1,5 @@
 import QtQuick
 import qs.Common
-import qs.Widgets
 import "../widgets"
 
 // Right-click menu of a tree row (new note/folder, rename, pin, move, delete). Inputs: ui (ctx = target + position).

@@ -36,8 +36,8 @@ Rectangle {
                 textColor: Theme.surfaceText
                 font.pixelSize: Theme.fontSizeMedium
                 placeholderText: "Find"
-                keyForwardTargets: [keys]
-                onTextEdited: findTimer.restart()
+                keyForwardTargets: [ui.keys]
+                onTextEdited: ui.findTimer.restart()
                 onAccepted: ui.findStep(1)
             }
             StyledText {
@@ -83,7 +83,7 @@ Rectangle {
                 textColor: Theme.surfaceText
                 font.pixelSize: Theme.fontSizeMedium
                 placeholderText: "Replace with"
-                keyForwardTargets: [keys]
+                keyForwardTargets: [ui.keys]
                 onAccepted: ui.replaceCurrent()
             }
             Rectangle {

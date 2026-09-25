@@ -6,7 +6,7 @@ SuperNote registers the IPC target `supernote` with DMS. Every verb is called as
 dms ipc call supernote <verb> [argument]
 ```
 
-and prints one line of text. Verbs that need the vault (or the state file) wait for it to be ready, so they are safe
+and prints one line of text. Verbs that need the vault or the saved state wait for it to be ready (`status` just reports what is loaded), so they are safe
 to call right after start-up. The panel opens on the focused screen.
 
 | Verb | Argument | Does |

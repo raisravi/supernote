@@ -1,6 +1,5 @@
 import QtQuick
 import qs.Common
-import qs.Widgets
 import "../widgets"
 
 // Vault menu under the header: switch / remove vaults, undo last rename, open another vault. Inputs: ui.
