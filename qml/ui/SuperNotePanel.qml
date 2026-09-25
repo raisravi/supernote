@@ -920,7 +920,7 @@ Item {
             resolveNote: n => core.resolveNote(n),
             resolveAsset: (n, d) => core.resolveAsset(n, d),
             getEmbed: n => core.getEmbed(n),
-            diagram: (kind, src, display) => core.diagram(kind, src, display, Math.max(200, previewFlick.width - 64))
+            diagram: (kind, src, display) => core.render.diagram(kind, src, display, Math.max(200, previewFlick.width - 64))
         };
     }
 
@@ -928,7 +928,7 @@ Item {
         if (core.viewMode === "edit" || !core.noteRel) {
             return;
         }
-        core.beginRenderPass();
+        core.render.beginPass();
         const r = Md.renderPreview(core.buffer, previewCtx());
         previewHtml = Html.renderHtml(r.markdown, previewColors);
         previewProps = r.props.map(p => ({ key: p.key, text: Array.isArray(p.value) ? p.value.join(", ") : String(p.value) }));
@@ -1034,10 +1034,6 @@ Item {
             else
                 ui.core.toast("Heading \"" + heading + "\" not found in this note");
         }
-        function onRenderSerialChanged() {
-            if (ui.core.viewMode !== "edit")
-                previewTimer.restart();
-        }
         function onEmbedSerialChanged() {
             if (ui.core.viewMode !== "edit")
                 previewTimer.restart();
@@ -1068,6 +1064,13 @@ Item {
                 Qt.callLater(ui.focusEditor);
             }
         }
+    }
+
+    // a math / Mermaid picture became available: refresh the preview
+    readonly property int pictureSerial: core.render.serial
+    onPictureSerialChanged: {
+        if (core.viewMode !== "edit")
+            previewTimer.restart();
     }
 
     property bool syncing: false
