@@ -10,7 +10,9 @@ VaultLayer {
 
     function loadNoteState() {
         viewMode = readState("viewMode", "edit");
-        showToolbar = readState("showToolbar", true);
+        // the toolbar switch now lives in the plugin settings: carry an earlier "hidden" choice over once
+        if (readState("showToolbar", true) === false && (pluginData || {}).showToolbar === undefined && pluginService)
+            pluginService.savePluginData(pluginId, "showToolbar", false);
         propsOpen = readState("propsOpen", false);
     }
 
@@ -26,7 +28,8 @@ VaultLayer {
     property int focusSerial: 0
     property string focusTarget: "editor"
     property string viewMode: "edit"
-    property bool showToolbar: true
+    // formatting toolbar visibility: a plugin setting (DMS Settings), also toggled from the palette / status bar
+    readonly property bool showToolbar: (pluginData || {}).showToolbar !== false
     property int editorSetSerial: 0
     readonly property string noteTitle: noteRel ? Tree.baseName(noteRel) : ""
 
@@ -49,8 +52,8 @@ VaultLayer {
     }
 
     function toggleToolbar() {
-        showToolbar = !showToolbar;
-        writeState("showToolbar", showToolbar);
+        if (pluginService)
+            pluginService.savePluginData(pluginId, "showToolbar", !showToolbar);
     }
 
     // Change the buffer from outside the editor (e.g. ticking a checkbox in the preview).

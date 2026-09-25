@@ -12,19 +12,43 @@ function pad(n, w) {
     return s;
 }
 
-// Obsidian/moment-style format: YYYY YY MMMM MMM MM M DD D dddd ddd HH H hh h mm m ss s A a, [literal].
+function ordinal(n) {
+    var v = n % 100;
+    if (v >= 11 && v <= 13)
+        return n + "th";
+    return n + (["th", "st", "nd", "rd"][n % 10] || "th");
+}
+
+// ISO 8601 week number and week-year of a date.
+function isoWeek(d) {
+    var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    var day = t.getUTCDay() || 7;
+    t.setUTCDate(t.getUTCDate() + 4 - day);            // the Thursday of this week decides the year
+    var yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+    return { week: Math.ceil(((t - yearStart) / 86400000 + 1) / 7), year: t.getUTCFullYear() };
+}
+
+function dayOfYear(d) {
+    return Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(d.getFullYear(), 0, 0)) / 86400000);
+}
+
+// Obsidian/moment-style format: YYYY YY GGGG gggg MMMM MMM MM M Do DDDD DDD DD D dddd ddd dd d E WW W Q
+// HH H hh h mm m ss s A a, and [literal text].
 function formatDate(fmt, d) {
     var h12 = d.getHours() % 12 === 0 ? 12 : d.getHours() % 12;
+    var iso = isoWeek(d);
+    var doy = dayOfYear(d);
     var tokens = {
-        YYYY: pad(d.getFullYear(), 4), YY: pad(d.getFullYear() % 100, 2),
+        YYYY: pad(d.getFullYear(), 4), YY: pad(d.getFullYear() % 100, 2), GGGG: String(iso.year), gggg: String(iso.year),
         MMMM: MONTHS[d.getMonth()], MMM: MONTHS[d.getMonth()].slice(0, 3), MM: pad(d.getMonth() + 1, 2), M: String(d.getMonth() + 1),
-        DD: pad(d.getDate(), 2), D: String(d.getDate()),
-        dddd: DAYS[d.getDay()], ddd: DAYS[d.getDay()].slice(0, 3),
+        Do: ordinal(d.getDate()), DDDD: pad(doy, 3), DDD: String(doy), DD: pad(d.getDate(), 2), D: String(d.getDate()),
+        dddd: DAYS[d.getDay()], ddd: DAYS[d.getDay()].slice(0, 3), dd: DAYS[d.getDay()].slice(0, 2), d: String(d.getDay()),
+        E: String(d.getDay() || 7), WW: pad(iso.week, 2), W: String(iso.week), Q: String(Math.floor(d.getMonth() / 3) + 1),
         HH: pad(d.getHours(), 2), H: String(d.getHours()), hh: pad(h12, 2), h: String(h12),
         mm: pad(d.getMinutes(), 2), m: String(d.getMinutes()), ss: pad(d.getSeconds(), 2), s: String(d.getSeconds()),
         A: d.getHours() < 12 ? "AM" : "PM", a: d.getHours() < 12 ? "am" : "pm"
     };
-    return fmt.replace(/\[([^\]]*)\]|YYYY|YY|MMMM|MMM|MM|M|DD|D|dddd|ddd|HH|H|hh|h|mm|m|ss|s|A|a/g, function (m, lit) {
+    return fmt.replace(/\[([^\]]*)\]|YYYY|YY|GGGG|gggg|MMMM|MMM|MM|M|Do|DDDD|DDD|DD|D|dddd|ddd|dd|d|E|WW|W|Q|HH|H|hh|h|mm|m|ss|s|A|a/g, function (m, lit) {
         return lit !== undefined ? lit : tokens[m];
     });
 }

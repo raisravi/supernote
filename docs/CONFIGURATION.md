@@ -13,10 +13,13 @@ if it has one, otherwise the default"**. Values from the settings page win over 
 | Templates folder (`templatesFolder`) | `Templates` | notes offered by *New note from template* / *Insert template* |
 | Attachments folder (`attachmentsFolder`) | `Attachments` | where pasted images go; `/` = vault root, `./sub` = next to the note |
 | Inbox folder (`inboxFolder`) | `Inbox` | where `Ctrl+Shift+Enter` in the capture box saves |
+| New notes go to (`newFileLocation`) | selected folder | `current` (the selected folder), `root` (vault root) or `folder` (the fixed folder below) |
+| Fixed folder for new notes (`newFileFolder`) | none | vault path used when the location is `folder` |
+| Formatting toolbar (`showToolbar`) | on | also toggled from the command palette or the status bar |
 | Editor font size (`editorFontSize`) | 15 | pixels |
 
-Date formats understand `YYYY YY MMMM MMM MM M DD D dddd ddd HH H hh h mm m ss s A a` and `[literal text]`. (Obsidian's
-`Do`, `W`, `Q`, `gggg` are not supported.) Folder settings are cleaned (no leading / trailing slash, no `.` or `..`).
+Date formats understand `YYYY YY GGGG gggg MMMM MMM MM M Do DDDD DDD DD D dddd ddd dd d E WW W Q HH H hh h mm m ss s A a`
+and `[literal text]` (`W`, `GGGG` and `gggg` are ISO 8601 weeks). Folder settings are cleaned (no leading / trailing slash, no `.` or `..`).
 
 The vault list, view mode, sidebar state, tabs, pins and similar UI state are not settings: they live in the state
 file below and are changed from the panel.

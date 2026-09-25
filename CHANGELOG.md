@@ -12,6 +12,7 @@
 - Documentation: README plus `docs/` (usage, IPC, configuration, architecture, development, rendering, design).
 
 ### Added
+- **Settings page**: where new notes go (`newFileLocation` / `newFileFolder`) and the formatting-toolbar switch; date formats gain `Do`, `DDD`, `dd`, `d`, `E`, `W`/`WW`, `GGGG`/`gggg`, `Q`.
 - **Follow wikilinks in the editor**: `Ctrl+click` or `Ctrl+Enter` on a `[[link]]` (`Md.linkAt`, unit-tested).
 - `dms ipc call supernote command <id>`: run a palette command in the panel (also useful for testing).
 - `Command palette` entry in the palette; `Makefile` (`test`, `lint`, `reload`, `restart`, `link`, `mdit`);

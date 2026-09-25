@@ -39,7 +39,7 @@ PluginSettings {
         StringSetting {
             settingKey: "dailyFormat"
             label: "Daily note name"
-            description: "Date format (YYYY MM DD dddd MMMM, [literal]). Slashes make sub folders. Default: YYYY-MM-DD"
+            description: "Date format: YYYY MM DD Do dddd MMMM W Q ... and [literal text]. Slashes make sub folders. Default: YYYY-MM-DD"
             placeholder: "YYYY-MM-DD"
         }
 
@@ -62,6 +62,32 @@ PluginSettings {
             label: "Attachments folder"
             description: "Where pasted images go. \"/\" = vault root, \"./sub\" = next to the note. Default: Attachments"
             placeholder: "Attachments"
+        }
+
+        SelectionSetting {
+            settingKey: "newFileLocation"
+            label: "New notes go to"
+            description: "Where Ctrl+N and \"New note from template\" create notes. Default: the selected folder (or the vault's Obsidian setting)"
+            options: [
+                { label: "The selected folder", value: "current" },
+                { label: "The vault root", value: "root" },
+                { label: "A fixed folder (below)", value: "folder" }
+            ]
+            defaultValue: "current"
+        }
+
+        StringSetting {
+            settingKey: "newFileFolder"
+            label: "Fixed folder for new notes"
+            description: "Used when \"New notes go to\" is \"A fixed folder\". Vault path, e.g. Inbox"
+            placeholder: "Inbox"
+        }
+
+        ToggleSetting {
+            settingKey: "showToolbar"
+            label: "Formatting toolbar"
+            description: "Show the toolbar above the editor (also toggled from the command palette or the status bar)"
+            defaultValue: true
         }
 
         StringSetting {

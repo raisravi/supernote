@@ -13,6 +13,29 @@ test("formatDate: short names", () => assert.strictEqual(C.formatDate("ddd MMM",
 test("formatDate: [literal] text is kept", () => assert.strictEqual(C.formatDate("[Week of] YYYY", D), "Week of 2026"));
 test("formatDate: 12-hour clock", () => assert.strictEqual(C.formatDate("hh:mm A", new Date(2026, 0, 1, 15, 4)), "03:04 PM"));
 test("formatDate: unknown letters pass through", () => assert.strictEqual(C.formatDate("YYYY-MM-DD_x", D), "2026-09-04_x"));
+test("formatDate: ordinal day, quarter, weekday forms, day of year", () => {
+  assert.strictEqual(C.formatDate("Do", D), "4th");
+  assert.strictEqual(C.formatDate("Do", new Date(2026, 0, 1)), "1st");
+  assert.strictEqual(C.formatDate("Do", new Date(2026, 0, 2)), "2nd");
+  assert.strictEqual(C.formatDate("Do", new Date(2026, 0, 3)), "3rd");
+  assert.strictEqual(C.formatDate("Do", new Date(2026, 0, 11)), "11th");
+  assert.strictEqual(C.formatDate("Do", new Date(2026, 0, 22)), "22nd");
+  assert.strictEqual(C.formatDate("Q", D), "3");
+  assert.strictEqual(C.formatDate("dd d E", D), "Fr 5 5");
+  assert.strictEqual(C.formatDate("DDD", D), "247");
+  assert.strictEqual(C.formatDate("DDDD", new Date(2026, 0, 5)), "005");
+});
+test("formatDate: ISO week and week-year", () => {
+  assert.strictEqual(C.formatDate("GGGG-[W]WW", D), "2026-W36");
+  assert.strictEqual(C.formatDate("W", new Date(2026, 0, 5)), "2");
+  assert.strictEqual(C.formatDate("gggg-WW", new Date(2027, 0, 1)), "2026-53");   // Fri 1 Jan 2027 belongs to 2026's last week
+  assert.strictEqual(C.formatDate("GGGG-WW", new Date(2021, 0, 1)), "2020-53");
+  assert.strictEqual(C.formatDate("GGGG-WW", new Date(2024, 11, 30)), "2025-01");  // Mon 30 Dec 2024 is week 1 of 2025
+});
+test("formatDate: old formats are unaffected by the new tokens", () => {
+  assert.strictEqual(C.formatDate("YYYY-MM-DD", D), "2026-09-04");
+  assert.strictEqual(C.formatDate("[Week of] YYYY", D), "Week of 2026");
+});
 test("defaults", () => {
   const d = C.defaults();
   assert.deepStrictEqual([d.dailyFolder, d.dailyFormat, d.templatesFolder, d.attachmentsFolder, d.inboxFolder], ["Daily", "YYYY-MM-DD", "Templates", "Attachments", "Inbox"]);
