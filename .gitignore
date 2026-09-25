@@ -1,0 +1,7 @@
+# editor / OS
+*.swp
+.DS_Store
+# local scratch
+*.tmp
+*.part
+node_modules/
