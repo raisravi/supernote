@@ -2,7 +2,7 @@
     "id": "supernote",
     "name": "SuperNote",
     "description": "Obsidian-style markdown notes vault: editor, tree, tabs, search, capture",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "author": "ravi",
     "icon": "edit_note",
     "type": "daemon",
