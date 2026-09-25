@@ -30,6 +30,7 @@ var COMMANDS = [
     { id: "replace", group: "Edit", title: "Find and replace", keys: "Ctrl+H", needsNote: true },
     { id: "undo-rename", group: "Vault", title: "Undo last rename / move", keys: "" },
     { id: "add-vault", group: "Vault", title: "Open another vault…", keys: "" },
+    { id: "palette", group: "Help", title: "Command palette", keys: "Ctrl+P" },
     { id: "cheatsheet", group: "Help", title: "Keyboard shortcuts", keys: "Ctrl+/" }
 ];
 

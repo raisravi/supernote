@@ -67,6 +67,11 @@ WindowLayer {
             root.captureClipboard();
             return "capturing clipboard";
         }
+        function command(id: string): string {
+            root.open();
+            root.afterReady(() => root.commandRequest(id));
+            return "command: " + id;
+        }
         function search(query: string): string {
             root.open();
             root.afterReady(() => {
@@ -115,6 +120,12 @@ WindowLayer {
     Loader {
         id: ui
         active: root.uiActive
+        onStatusChanged: {
+            if (status === Loader.Error) {
+                const c = Qt.createComponent(source);
+                console.warn("SuperNote: the panel failed to load:", c.errorString());
+            }
+        }
         onActiveChanged: {
             if (active)
                 setSource("file://" + root.pluginDir + "/qml/ui/SuperNotePanel.qml?v=" + Date.now(), { core: root });

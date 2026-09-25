@@ -31,6 +31,7 @@ NavLayer {
     property var tagExpanded: ({})
     property string tagSelected: ""
     signal searchRequest(string query)
+    signal commandRequest(string id)   // run a palette command in the panel (IPC "command")
 
     function togglePin(rel) {
         const pn = clone(pinsByVault);
