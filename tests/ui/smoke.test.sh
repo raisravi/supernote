@@ -106,7 +106,7 @@ check "an invalid view mode is ignored" edit "$(field .viewMode)"
 
 # ---- left panel, tabs, right panel, commands ---------------------------------------------------------------------
 ipc sidebar >/dev/null
-wait_for "the left panel opens 280 px wide" '.sidebar and .panel.sidebarWidth == 280 and .panel.editorWidth < 300' 5
+wait_for "the left panel opens 280 px wide" ".sidebar and .panel.sidebarWidth == 280 and .panel.editorWidth < $W0" 5
 ipc command tags >/dev/null
 wait_for "the tags tab is selected" '.sidebarTab == "tags"' 5
 ipc command files >/dev/null
@@ -154,7 +154,7 @@ ipc command properties >/dev/null   # it was opened above: toggle it back
 ipc expand >/dev/null
 wait_for "expand makes a real window" '.window == "window" and .panel.mode == "window" and .panel.visible and .panel.width > 700' 10
 ipc dock >/dev/null
-wait_for "dock returns to the right side" '.window == "dock" and .panel.width == 500 and .panel.visible' 10
+wait_for "dock returns to the right side" ".window == \"dock\" and .panel.width == $W0 and .panel.visible" 10
 
 # ---- notes, capture, daily --------------------------------------------------------------------------------------------
 ipc capture "ui smoke capture" >/dev/null

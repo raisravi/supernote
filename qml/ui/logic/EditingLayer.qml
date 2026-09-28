@@ -138,6 +138,19 @@ PanelBase {
             event.accepted = true;
             return;
         }
+        // Alt+<printable key> would otherwise insert the character: Qt's TextEdit only blocks its own default
+        // text-input handling for Ctrl (word-nav etc.), not for a lone Alt, so the panel-level Alt++/Alt+- resize
+        // shortcut (PanelBase.handleKey) never even sees the event while the editor has focus - claim it here first.
+        if (alt && !ctrl && !shift && !keys.inWindow && (event.key === Qt.Key_Plus || event.key === Qt.Key_Equal)) {
+            core.setDockWidth(core.dockWidth + core.dockWidthStep);
+            event.accepted = true;
+            return;
+        }
+        if (alt && !ctrl && !shift && !keys.inWindow && event.key === Qt.Key_Minus) {
+            core.setDockWidth(core.dockWidth - core.dockWidthStep);
+            event.accepted = true;
+            return;
+        }
         const ed = MdKeys.handle(editor.text, editor.selectionStart, editor.selectionEnd, { key: event.key, ctrl: ctrl, shift: shift, alt: alt, text: event.text });
         if (ed) {
             applyEdit(ed);
