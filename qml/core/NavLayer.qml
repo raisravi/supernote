@@ -53,6 +53,13 @@ NoteLayer {
         });
     }
 
+    // Same as openLink, but usable when the panel might be closed and the vault not yet loaded (e.g. a [[link]]
+    // clicked in the quick-capture box, a separate window): shows the panel and waits for the vault first.
+    function followLink(name, heading) {
+        open();
+        afterReady(() => openLink(name, heading));
+    }
+
     function persistTabs() {
         if (!vaultReady)
             return;

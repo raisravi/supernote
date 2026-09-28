@@ -7,6 +7,8 @@
   (`Alt+=` also works, unshifted) to grow/shrink by a step; double-click the handle, or the palette's *Reset the
   docked panel's width*, to go back to the default. Width is saved and only applies when docked (the expanded
   window is resized by the compositor as usual). Commands `widen-panel` / `narrow-panel` / `reset-panel-width`.
+- **Follow wikilinks from the quick-capture box**: `Ctrl+click` a `[[link]]` in the draft opens (or creates) it in
+  the main panel, which is shown if it was closed; the capture box itself stays open with the draft intact.
 
 ### Fixed
 - The entry file's panel `Loader` shared the id `ui` with the panel's own logic-chain object (every component's
@@ -14,6 +16,9 @@
 - `tests/ui/smoke.test.sh`: reading the plugin's state right after a `dms restart` (before it had ever loaded its
   saved settings) captured empty/default values as "the user's current settings", and could "restore" the vault
   list to include a blank entry. It now warms the state up first.
+- `Alt++` / `Alt+-` were being typed into the note instead of resizing the panel: Qt's editor only blocks its own
+  default key handling for Ctrl, not for a lone Alt, so the panel-level shortcut never saw the event while the
+  editor had focus. Claimed in the editor's own key handler instead, alongside Ctrl+V and Ctrl+Enter-follow-link.
 
 ## 0.6.0
 

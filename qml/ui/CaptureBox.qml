@@ -6,6 +6,7 @@ import qs.Common
 import qs.Services
 import qs.Widgets
 import "../../js/mdkeys.js" as MdKeys
+import "../../js/markdown.js" as Md
 
 // SuperNote quick capture: a small markdown box. Enter is a new line (lists continue like in the editor);
 // Ctrl+Enter appends to today's daily note, Ctrl+Shift+Enter saves an Inbox note, Esc cancels.
@@ -18,6 +19,15 @@ Item {
 
     function close() {
         core.captureVisible = false;
+    }
+
+    // Ctrl+click a [[link]] in the draft: open (or create) it in the main panel. The capture box is left open
+    // with the draft intact - following a link is a quick peek, not a reason to lose what you were writing.
+    function followLinkAt(offset) {
+        const link = Md.linkAt(field.text, offset);
+        if (!link)
+            return;
+        core.followLink(link.name, link.heading);
     }
 
     function submit(asNote) {
@@ -146,6 +156,12 @@ Item {
                     placeholderTextColor: Theme.surfaceVariantText
                     background: null
                     readOnly: box.busy
+                    // Ctrl+click follows a [[wikilink]] (a plain click still just places the caret)
+                    TapHandler {
+                        acceptedModifiers: Qt.ControlModifier
+                        gesturePolicy: TapHandler.ReleaseWithinBounds
+                        onTapped: eventPoint => box.followLinkAt(field.positionAt(eventPoint.position.x, eventPoint.position.y))
+                    }
                     Keys.onPressed: event => {
                         const ctrl = (event.modifiers & Qt.ControlModifier) !== 0;
                         const shift = (event.modifiers & Qt.ShiftModifier) !== 0;

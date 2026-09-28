@@ -99,7 +99,8 @@ The left panel's tabs are *Files*, *Search*, *Tags*.
 - **Quick capture** `Super+Ctrl+N` opens a small markdown box that works with the panel closed. `Enter` is a new line
   (lists, tasks and quotes continue; `Ctrl+B/I/K/L`, headings, `Tab` and auto-pairing work as in the editor).
   `Ctrl+Enter` appends `- HH:MM text` under `## Captures` in today's daily note, `Ctrl+Shift+Enter` saves the text as
-  its own note in `Inbox/` (named from its first line), `Esc` cancels.
+  its own note in `Inbox/` (named from its first line), `Esc` cancels. `Ctrl+click` a `[[link]]` in the draft opens
+  (or creates) it in the main panel; the capture box stays open with your draft, so a quick peek never loses it.
 - **Daily note**: the header button, the palette or `dms ipc call supernote daily`. Folder, date format and template
   come from `.obsidian/daily-notes.json` when the vault has one, else the SuperNote settings, else `Daily/` and
   `YYYY-MM-DD`.
