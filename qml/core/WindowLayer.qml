@@ -11,6 +11,14 @@ CaptureLayer {
     property bool showSidebarWindow: true
     readonly property bool showSidebar: windowMode === "window" ? showSidebarWindow : showSidebarDock
 
+    // Width of the docked panel (drag handle / Alt+ / Alt- in the panel; irrelevant in window mode, where the
+    // compositor's own window resize applies). The UI clamps this again to the screen width when laying out.
+    readonly property int minDockWidth: 360
+    readonly property int maxDockWidth: 1400
+    readonly property int dockWidthStep: 40
+    readonly property int defaultDockWidth: 500
+    property int dockWidth: 500
+
     function open() {
         if (!stateLoaded) {
             afterState(() => open());
@@ -66,9 +74,18 @@ CaptureLayer {
         windowMode = "dock";
     }
 
+    function setDockWidth(w) {
+        const clamped = Math.round(Math.max(minDockWidth, Math.min(maxDockWidth, w)));
+        if (clamped === dockWidth)
+            return;
+        dockWidth = clamped;
+        writeState("dockWidth", clamped);
+    }
+
     function loadWindowState() {
         showSidebarDock = readState("sidebarDock", false);
         showSidebarWindow = readState("sidebarWindow", true);
+        dockWidth = readState("dockWidth", defaultDockWidth);
     }
 
     // Read every persisted setting once, on first use (each layer owns its own keys).

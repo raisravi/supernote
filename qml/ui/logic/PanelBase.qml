@@ -157,6 +157,7 @@ Item {
     function handleKey(event) {
         const ctrl = (event.modifiers & Qt.ControlModifier) !== 0;
         const shift = (event.modifiers & Qt.ShiftModifier) !== 0;
+        const alt = (event.modifiers & Qt.AltModifier) !== 0;
         if (event.key === Qt.Key_Escape) {
             if (cheatOpen) {
                 cheatOpen = false;
@@ -213,6 +214,12 @@ Item {
             event.accepted = true;
         } else if ((event.modifiers & Qt.AltModifier) && event.key === Qt.Key_Right) {
             core.goForward();
+            event.accepted = true;
+        } else if (alt && !ctrl && !shift && (event.key === Qt.Key_Plus || event.key === Qt.Key_Equal) && !keys.inWindow) {
+            core.setDockWidth(core.dockWidth + core.dockWidthStep);
+            event.accepted = true;
+        } else if (alt && !ctrl && !shift && event.key === Qt.Key_Minus && !keys.inWindow) {
+            core.setDockWidth(core.dockWidth - core.dockWidthStep);
             event.accepted = true;
         } else if (ctrl && shift && event.key === Qt.Key_F) {
             openSearch();

@@ -19,6 +19,14 @@ fi
 V=$(mktemp -d -p "$HOME" .sn-ui-smoke-XXXX)
 TODAY=$(date +%F)
 START=$(date '+%Y-%m-%d %H:%M:%S')
+
+# The plugin only loads its saved settings (vault list, view mode, ...) the first time it opens (`ensureState`); read
+# right after a `dms restart`, `status` reports pre-load defaults ("" vault, no vaults list, ...) rather than the
+# user's real settings. Open-then-close once, unconditionally, before reading "the current state" to capture and
+# restore, so a first-ever run right after a restart can't mistake those defaults for real settings and "restore"
+# the user into an empty/bogus vault.
+ipc open >/dev/null 2>&1; sleep 1; ipc close >/dev/null 2>&1
+
 INIT=$(status)
 INIT_VAULT=$(jq -r .vault <<< "$INIT")
 INIT_VIEW=$(jq -r .viewMode <<< "$INIT")
@@ -34,7 +42,9 @@ restore() {
   [[ $(field .toolbar) != "$INIT_TOOLBAR" ]] && ipc command toolbar >/dev/null 2>&1
   [[ $(field .rightPanel) != "$INIT_RIGHT" ]] && ipc command right-panel >/dev/null 2>&1
   ipc viewMode "$INIT_VIEW" >/dev/null 2>&1
-  ipc vault "$INIT_VAULT" >/dev/null 2>&1
+  # never restore into an empty/bogus vault (see the note above) - if we somehow still don't have a real one, leave
+  # whatever vault the fixture-vault removal below settles on rather than corrupt the vault list with ""
+  [[ -n $INIT_VAULT ]] && ipc vault "$INIT_VAULT" >/dev/null 2>&1
   sleep 1
   ipc removeVault "$V" >/dev/null 2>&1
   rm -rf "$V"
@@ -75,12 +85,14 @@ ipc dock >/dev/null
 ipc viewMode edit >/dev/null
 ipc open >/dev/null
 wait_for "the panel opens docked and loads" '.visible and .panel.state == "ready" and .panel.visible and .panel.mode == "dock"' 10 || { echo "the panel did not load: nothing else can be tested"; summary "ui smoke"; exit 1; }
-check "docked panel is 500 px wide" 500 "$(field .panel.width)"
+# the docked width is whatever the user has it set to (drag / Alt+ / Alt-); not assumed to be the 500px default
+W0=$(field .panel.width)
+check "the docked panel has a plausible width" 1 "$([[ $W0 -ge 360 ]] && echo 1 || echo 0)"
 check "the left panel starts hidden" 0 "$(field .panel.sidebarWidth)"
 
 ipc openNote A >/dev/null
 wait_for "openNote A opens A.md" '.note == "A.md" and .bufferLength > 100 and (.dirty | not)' 8
-wait_for "the editor fills the docked width" '.panel.editorWidth == 500 and .panel.editorVisible and (.panel.previewVisible | not)' 5
+wait_for "the editor fills the docked width" ".panel.editorWidth == $W0 and .panel.editorVisible and (.panel.previewVisible | not)" 5
 
 # ---- view modes --------------------------------------------------------------------------------------------------------
 ipc viewMode split >/dev/null
@@ -105,6 +117,18 @@ ipc command right-panel >/dev/null
 wait_for "the right panel opens" '.rightPanel and .panel.rightPanelWidth == 300' 5
 ipc command right-panel >/dev/null
 wait_for "the right panel closes" '(.rightPanel | not) and .panel.rightPanelWidth == 0' 5
+
+# resizing the docked panel (widen-panel/narrow-panel commands; Alt+ / Alt- do the same in the real UI, which
+# cannot be driven from here). Round-trips exactly back to W0 so a real user's saved width is never left changed;
+# skipped near the minimum width, where narrow-panel would clamp instead of moving by a full step.
+if (( W0 - 40 >= 360 )); then
+  ipc command narrow-panel >/dev/null
+  wait_for "narrow-panel shrinks the panel by one step" ".panel.width == $((W0 - 40))" 5
+  ipc command widen-panel >/dev/null
+  wait_for "widen-panel grows it back to the starting width" ".panel.width == $W0" 5
+else
+  skip_note "panel resize (already within one step of the minimum width)"
+fi
 
 ipc command new-tab >/dev/null
 wait_for "a second tab opens" '.tabs == 2' 5

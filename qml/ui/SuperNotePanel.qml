@@ -100,7 +100,7 @@ SyncLayer {
             parent: inWindow ? winHost : overlay.contentItem
             x: inWindow ? 0 : parent.width - width - 12
             y: inWindow ? 0 : 52
-            width: inWindow ? parent.width : Math.min(500, parent.width - 24)
+            width: inWindow ? parent.width : Math.min(ui.core.dockWidth, parent.width - 24)
             height: inWindow ? parent.height : parent.height - 52 - 12
             focus: ui.core.panelVisible
 
@@ -195,6 +195,56 @@ SyncLayer {
                     id: dialog
                     ui: ui
                 }
+            }
+        }
+
+        // Drag handle for the docked panel's width: straddles keysScope's left edge (half in the panel, half
+        // outside it), so it needs to paint above the full-window "click outside closes" MouseArea above.
+        // keysScope.x itself moves as the width changes (it's anchored off `width`), so the drag is tracked in
+        // overlay.contentItem's stable coordinate space (mapToItem on every move) rather than raw local mouse.x,
+        // which would fight its own moving frame.
+        Item {
+            id: dockResizeHandle
+            visible: !keysScope.inWindow
+            z: 5
+            x: keysScope.x - width / 2
+            y: keysScope.y
+            width: 8
+            height: keysScope.height
+
+            property real dragStartX: 0
+            property int dragStartWidth: 0
+
+            Rectangle {
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: 2
+                height: parent.height
+                radius: 1
+                color: Theme.primary
+                opacity: handleMouse.containsMouse || handleMouse.pressed ? 0.6 : 0
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 100
+                    }
+                }
+            }
+
+            MouseArea {
+                id: handleMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.SizeHorCursor
+                onPressed: mouse => {
+                    dockResizeHandle.dragStartX = handleMouse.mapToItem(overlay.contentItem, mouse.x, mouse.y).x;
+                    dockResizeHandle.dragStartWidth = ui.core.dockWidth;
+                }
+                onPositionChanged: mouse => {
+                    if (!pressed)
+                        return;
+                    const gx = handleMouse.mapToItem(overlay.contentItem, mouse.x, mouse.y).x;
+                    ui.core.setDockWidth(dockResizeHandle.dragStartWidth + (dockResizeHandle.dragStartX - gx));
+                }
+                onDoubleClicked: ui.core.setDockWidth(ui.core.defaultDockWidth)
             }
         }
     }

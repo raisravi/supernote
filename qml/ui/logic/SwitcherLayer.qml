@@ -93,6 +93,9 @@ SidebarLayer {
         case "retry-renders": core.render.retryFailed(); break;
         case "toggle-sidebar": core.toggleSidebar(); break;
         case "expand-window": if (core.windowMode === "window") core.dockAgain(); else core.expandToWindow(); break;
+        case "widen-panel": core.setDockWidth(core.dockWidth + core.dockWidthStep); break;
+        case "narrow-panel": core.setDockWidth(core.dockWidth - core.dockWidthStep); break;
+        case "reset-panel-width": core.setDockWidth(core.defaultDockWidth); break;
         case "properties": core.toggleProps(); break;
         case "search": openSearch(); break;
         case "tags": core.setSidebarTab("tags"); break;

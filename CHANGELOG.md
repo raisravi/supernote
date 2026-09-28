@@ -2,9 +2,18 @@
 
 ## Unreleased
 
+### Added
+- **Resize the docked panel.** Drag its left edge (cursor turns into a resize handle), or `Alt++` / `Alt+-`
+  (`Alt+=` also works, unshifted) to grow/shrink by a step; double-click the handle, or the palette's *Reset the
+  docked panel's width*, to go back to the default. Width is saved and only applies when docked (the expanded
+  window is resized by the compositor as usual). Commands `widen-panel` / `narrow-panel` / `reset-panel-width`.
+
 ### Fixed
 - The entry file's panel `Loader` shared the id `ui` with the panel's own logic-chain object (every component's
   `required property var ui`); renamed the loader to `panelLoader` to remove the confusion.
+- `tests/ui/smoke.test.sh`: reading the plugin's state right after a `dms restart` (before it had ever loaded its
+  saved settings) captured empty/default values as "the user's current settings", and could "restore" the vault
+  list to include a blank entry. It now warms the state up first.
 
 ## 0.6.0
 

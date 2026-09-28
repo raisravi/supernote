@@ -68,7 +68,7 @@ Keys inside the panel are fixed (Obsidian defaults); the list is in [USAGE.md](U
 
 | Path | What |
 |---|---|
-| `~/.local/state/DankMaterialShell/plugins/supernote.state.json` | UI/vault state (vaults, active vault, expanded folders, tabs, recents, pins, view mode, sidebar, ...) |
+| `~/.local/state/DankMaterialShell/plugins/supernote.state.json` | UI/vault state (vaults, active vault, expanded folders, tabs, recents, pins, view mode, sidebar, docked panel width, ...) |
 | `~/.local/state/DankMaterialShell/plugins/supernote/backups/<time>/` | originals of notes touched by a link-updating rename / move (last 10 kept) |
 | `~/.local/state/DankMaterialShell/plugins/supernote.plan.json`, `supernote.put*.tmp`, `supernote.render*.src` | short-lived hand-off files between the QML and the scripts |
 | `~/.cache/supernote/render/*.png` | rendered math / Mermaid pictures (pruned after 45 days, at most 800 kept) |

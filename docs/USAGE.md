@@ -15,6 +15,11 @@ The header's *expand* button (also `dms ipc call supernote expand` and the palet
 window** that your compositor tiles, moves and resizes, with the left panel shown. The same button docks it back. The
 panel always reopens docked.
 
+**Resizing the docked panel**: drag its left edge (the cursor turns into a resize handle), or `Alt++` / `Alt+-`
+(`Alt+=` works the same as `Alt++`) to grow or shrink it by a step. Double-click the handle, or the palette's
+*Reset the docked panel's width*, to go back to the default. The width is remembered; it only applies while docked
+(the expanded window is resized by your compositor as usual).
+
 Header, left to right: vault menu, new note, today's daily note, new folder / sort by modified / refresh (left panel
 only), pin the open note, toggle the right panel, toggle the left panel, expand / dock, close.
 
