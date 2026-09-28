@@ -125,13 +125,15 @@ WindowLayer {
                 pins: root.pins.length,
                 captureBox: root.captureVisible,
                 renders: root.render.counts(),
-                panel: ui.status === Loader.Ready && ui.item ? Object.assign({ state: "ready" }, ui.item.layoutInfo()) : { state: ui.status === Loader.Error ? "error" : "off" }
+                panel: panelLoader.status === Loader.Ready && panelLoader.item ? Object.assign({ state: "ready" }, panelLoader.item.layoutInfo()) : { state: panelLoader.status === Loader.Error ? "error" : "off" }
             });
         }
     }
 
+    // Hosts the panel logic/visual chain (its own root type is separately named "ui" - the object every panel
+    // component refers to); this id is just the loader that brings it in, kept distinct to avoid confusion.
     Loader {
-        id: ui
+        id: panelLoader
         active: root.uiActive
         onStatusChanged: {
             if (status === Loader.Error) {

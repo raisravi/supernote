@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- The entry file's panel `Loader` shared the id `ui` with the panel's own logic-chain object (every component's
+  `required property var ui`); renamed the loader to `panelLoader` to remove the confusion.
+
 ## 0.6.0
 
 ### Changed
